@@ -1,0 +1,525 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annonces des biens et vehicules à louer aux comores
+{% endblock %}
+
+{% block body %}
+	<!-- Slider Section Start -->
+	<div class="slider">
+		<div class="all-slide owl-item">
+			<div class="single-slide" style="background-image:url(img/slide1.jpg);">
+				<div class="slider-overlay"></div>
+				<div class="slider-text">
+					<h1>Découvrir les îles Comores</h1>
+					<p>Visitez les Comores autrements, en vivant votre séjour comme tout autres Comoriens</p>
+					<ul>
+						<li><a href="">Reserver</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="single-slide" style="background-image:url(img/slide2.jpg);">
+				<div class="slider-overlay"></div>
+				<div class="slider-text">
+					<h1>Voyagez leger et libre</h1>
+					<p>Voyagez leger et recentez vous comme à la maison partout aux Comores</p>
+					<ul>
+						<li><a href="">Reserver</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Slider Section End -->
+	<!-- Booking Section End -->
+	<div class="booking-sec">
+		<div class="container">
+			<div class="row">
+				<form action="#">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<div class="single-field">
+							<h4>
+								<i class="fa fa-map-marker"></i>
+								Vous cherchez où ?</h4>
+							<input type="text" placeholder="adresse ou ville ou région" id="arrival-date" size="30">
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<div class="single-field">
+							<h4>
+								<i class="fa fa-calendar"></i>
+								Date arrivée</h4>
+							<input type="date" id="arrival-date" size="30">
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<div class="single-field">
+							<h4>
+								<i class="fa fa-calendar"></i>
+								Date départ
+							</h4>
+							<input type="date" id="outgoing-date" size="30">
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<div class="single-field">
+							<h4>Chambre</h4>
+							<div class="select-arrow">
+								<select>
+									<option value="1_room">1 chambres</option>
+									<option value="2_room">2 chambres</option>
+									<option value="3_room">3 chambres</option>
+									<option value="4_room">4 chambres</option>
+									<option value="5_room">5 chambres</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<div class="single-field">
+							<h4>...</h4>
+							<input type="submit" value="Rechercher"/>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Booking Section End -->
+	<!-- Room Section Start -->
+	<div class="room-sec pt-50 pb-20">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="sec-title">
+						<h1>Top
+							<span>hebergements</span>
+						</h1>
+						<div class="border-shape"></div>
+						<p>Les hébergements que les clients adorent (les mieux notés)</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				{% for data in biens %}
+					<div class="col-md-4 col-sm-6 inner">
+						<div class="single-room">
+							<div class="room-thumb">
+								{% for key,image in data.annonce.images %}
+									{% if key ==0 %}
+										<img src="{{image.lien}}" alt="{{image.titre}}"/>
+									{% endif %}
+								{% endfor %}
+								<div class="room-sell">
+									{% set typeBien = 'sell' %}
+									{% if data.annonce.typeBien == 'Particulier' %}
+										{% set typeBien = 'feature' %}
+									{% else %}
+										{% set typeBien = 'sell' %}
+									{% endif %}
+									<ul>
+										<li class="{{typeBien}}">
+											<a href="#">{{data.annonce.typeBien}}</a>
+										</li>
+									</ul>
+								</div>
+								<div class="single-room-overlay">
+									<a href="{{path('detail_biens', {'slug': data.annonce.slug})}}">En savoir plus</a>
+								</div>
+							</div>
+							<div class="room-info">
+								<h2>
+									<a href="{{path('detail_biens', {'slug': data.annonce.slug})}}">{{data.annonce.titre | slice(0,30)}}...
+									</a>
+								</h2>
+								<div class="address">
+									<i class="fa fa-map-marker"></i>
+									{{data.annonce.ville}}
+									/
+									{{data.annonce.commune.libelle}}</div>
+								<p>
+									<span>Chambre:
+										{{data.annonce.nbreChambre}}</span>
+									<span>Voyageurs:
+										{{data.annonce.nbreVisiteur}}
+									</span>
+									<span>Lits:
+										{{data.annonce.nbreLit}}</span>
+								</p>
+								<div class="room-meta">
+									<ul>
+										<li>
+											<i class="fa fa-user"></i>
+											{{data.annonce.proprio.getFullname}}</li>
+										<li>
+											{% include "partials/vote.html.twig" with {'rating': data.voter} %}
+
+										</li>
+
+										<li class="price">{{data.annonce.prix}}
+											€ / nuits</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<!-- Room Section End -->
+	<!-- Count Up Section Start -->
+	<div class="count-up-sec">
+		<div class="images-overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+					<div class="counting_sl">
+						<span>
+							<i class="fa fa-home"></i>
+						</span>
+						<h2 class="counter">{{ nbhote }}</h2>
+						<h4>Hebergements</h4>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+					<div class="counting_sl">
+						<span>
+							<i class="fa fa-users"></i>
+						</span>
+						<h2 class="counter">280</h2>
+						<h4>Hôtes</h4>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+					<div class="counting_sl">
+						<span>
+							<i class="fa fa-institution"></i>
+						</span>
+						<h2 class="counter">{{ nbhotel }}</h2>
+						<h4>Hotels</h4>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+					<div class="counting_sl">
+						<span>
+							<i class="fa fa-user"></i>
+						</span>
+						<h2 class="counter">{{ nbhote }}</h2>
+						<h4>Utilisateurs</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Count Up Section End -->
+	<!-- Location Section Start -->
+	<div class="locations-sec pt-50 pb-20">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="sec-title">
+						<h1>Voyagez<span>aux Comores</span>
+						</h1>
+						<div class="border-shape"></div>
+						<p>Quelques sites touristiques des îles de la lune.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="single-locations">
+						<img src="img/location4.jpg" alt=""/>
+						<div class="locations-overlay">
+							<div class="locations-text">
+								<h2>
+									<a href="property.html">Kuala Lumpur</a>
+								</h2>
+								<p>The World Largest City</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div class="single-locations">
+						<img src="img/location5.jpg" alt=""/>
+						<div class="locations-overlay">
+							<div class="locations-text">
+								<h2>
+									<a href="property.html">Hong Kong</a>
+								</h2>
+								<p>The World Largest City</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4">
+					<div class="single-locations">
+						<img src="img/location1.jpg" alt=""/>
+						<div class="locations-overlay">
+							<div class="locations-text">
+								<h2>
+									<a href="property.html">Australia</a>
+								</h2>
+								<p>The World Largest City</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4">
+					<div class="single-locations">
+						<img src="img/location2.jpg" alt=""/>
+						<div class="locations-overlay">
+							<div class="locations-text">
+								<h2>
+									<a href="property.html">Singapur</a>
+								</h2>
+								<p>The World Largest City</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4">
+					<div class="single-locations">
+						<img src="img/location3.jpg" alt=""/>
+						<div class="locations-overlay">
+							<div class="locations-text">
+								<h2>
+									<a href="property.html">New York</a>
+								</h2>
+								<p>The World Largest City</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Location Section Start -->
+	<!-- Testimonial Section Start -->
+	<div class="testimonial-sec">
+		<div class="testimonial-overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="sec-title">
+						<h1>Meilleurs<span>hôte</span>
+						</h1>
+						<div class="border-shape"></div>
+						<p>Les hôtes et hotels les mieux notés.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				{% for data in hotes %}
+					<div class="col-lg-3 col-md-3 encadrer">
+						<div class="item sngl-testimonial">
+							<div class="sngle-tsmt">
+								<div class="client-dsc">
+									<h2>{{data.utilisateur.getFullname }}</h2>
+									<h6>
+										{% include "partials/vote.html.twig" with {'rating': data.voter} %}
+									</h6>
+								</div>
+								<img src="{{data.utilisateur.photo}}" alt="{{data.utilisateur.slug}}"/>
+								<div class="address">
+									<i class="fa fa-map-marker"></i>
+									{{data.utilisateur.adresse}}
+									{{data.utilisateur.codePostal}}
+									{{data.utilisateur.ville}}</div>
+							</div>
+							<div class="single-hote-overly">
+								<a href="">en savoir plus</a>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<!-- Testimonial Section End -->
+	<!-- Call To Action Section Start -->
+	<div class="call-to-action-sec pt-50 pb-50">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 col-sm-8">
+					<div class="call-to-action-text">
+						<h2>Besoin d'aide? un support est disponible 24h/24
+						</h2>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4">
+					<div class="call-to-action-text">
+						<a href="" class="btn">Contact</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Call To Action Section Start -->
+	<!-- Blog Section Start -->
+	<div class="blog-sec pt-50 pb-20">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="sec-title">
+						<h1>Actualités<span>touristiques</span>
+						</h1>
+						<div class="border-shape"></div>
+						<p>Lorem ipsum dolor sit amet, pellentesque enim lorem quis vivamus amet.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 col-sm-4">
+					<div class="media">
+						<div class="single-post">
+							<img src="img/news1.jpg" alt=""/>
+							<div class="media-body">
+								<div class="single-post-text">
+									<ul>
+										<li>
+											<a href="#">
+												<i class="fa fa-user"></i>Admin</a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="fa fa-calendar"></i>07 July 2017</a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="fa fa-heart-o"></i>12</a>
+										</li>
+									</ul>
+									<h2>
+										<a href="blog-details.html">Lorem ipsum dolor</a>
+									</h2>
+									<p>Lorem ipsum dolor sit amet, pellentesque enim lorem quis vivamus amet, lectus nullam sint, risus quis accumsan duis lacinia, quam eleifend ut amet pede.
+									</p>
+									<a href="blog-details.html" class="btn blog-btn">Read More</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4">
+					<div class="media">
+						<div class="single-post">
+							<img src="img/news2.jpg" alt=""/>
+							<div class="media-body">
+								<div class="single-post-text">
+									<ul>
+										<li>
+											<a href="#">
+												<i class="fa fa-user"></i>Admin</a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="fa fa-calendar"></i>07 July 2017</a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="fa fa-heart-o"></i>12</a>
+										</li>
+									</ul>
+									<h2>
+										<a href="blog-details.html">Lorem ipsum dolor</a>
+									</h2>
+									<p>Lorem ipsum dolor sit amet, pellentesque enim lorem quis vivamus amet, lectus nullam sint, risus quis accumsan duis lacinia, quam eleifend ut amet pede.
+									</p>
+									<a href="blog-details.html" class="btn blog-btn">Read More</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4">
+					<div class="media">
+						<div class="single-post">
+							<img src="img/news3.jpg" alt=""/>
+							<div class="media-body">
+								<div class="single-post-text">
+									<ul>
+										<li>
+											<a href="#">
+												<i class="fa fa-user"></i>Admin</a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="fa fa-calendar"></i>07 July 2017</a>
+										</li>
+										<li>
+											<a href="#">
+												<i class="fa fa-heart-o"></i>12</a>
+										</li>
+									</ul>
+									<h2>
+										<a href="blog-details.html">Lorem ipsum dolor</a>
+									</h2>
+									<p>Lorem ipsum dolor sit amet, pellentesque enim lorem quis vivamus amet, lectus nullam sint, risus quis accumsan duis lacinia, quam eleifend ut amet pede.
+									</p>
+									<a href="blog-details.html" class="btn blog-btn">Read More</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Blog Section End -->
+	<!-- ad Service -->
+	<div class="service-sec pt-50 pb-20 bg-color">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="sec-title">
+						<h1>Proposeez<span>vos services</span>
+						</h1>
+						<div class="border-shape"></div>
+						<p>Lorem ipsum dolor sit amet, pellentesque enim lorem quis vivamus amet.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 col-sm-4 inner">
+					<div class="media">
+						<div class="icon">
+							<i class="fa fa-home"></i>
+						</div>
+						<div class="media-body">
+							<h2>Devenez hôte</h2>
+							<p>Lorem ipsum dolor sit amet, ligula magna at etiam aliquip venenatis. Vitae sit felis donec, suscipit tortor et sapien donec ac nec.</p>
+							<a href="service-details.html" class="btn morebutton">Cliquez ici</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4 inner">
+					<div class="media">
+						<div class="icon">
+							<i class="fa fa-institution"></i>
+						</div>
+						<div class="media-body">
+							<h2>Proposez un hôtel</h2>
+							<p>Lorem ipsum dolor sit amet, ligula magna at etiam aliquip venenatis. Vitae sit felis donec, suscipit tortor et sapien donec ac nec.</p>
+							<a href="service-details.html" class="btn morebutton">cliquez ici</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-4 inner">
+					<div class="media">
+						<div class="icon">
+							<i class="fa fa-users"></i>
+						</div>
+						<div class="media-body">
+							<h2>Devenez partenaire</h2>
+							<p>Lorem ipsum dolor sit amet, ligula magna at etiam aliquip venenatis. Vitae sit felis donec, suscipit tortor et sapien donec ac nec.</p>
+							<a href="service-details.html" class="btn morebutton">cliquez ici</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- Service Section End -->
+{% endblock %}
