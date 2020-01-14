@@ -24,16 +24,24 @@ class BiensRepository extends ServiceEntityRepository
      */
     public function tophebergement($limit)
     {
-        $req = $this->createQueryBuilder('b')
-            ->SELECT('b as annonce, AVG(c.vote) as voter')
-            ->join('b.reservers', 'r')
-            ->join('r.commentaires', 'c')
-            ->groupBy('b')
+        $req = $this->findAllBiens()
             ->orderBy('voter', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
         return $req;
+    }
+
+    /**
+     * cette requete retourne toutes les valeurs des biens (annonce)
+     */
+    private function findAllBiens()
+    {
+        return $this->createQueryBuilder('b')
+            ->SELECT('b as annonce, AVG(c.vote) as voter')
+            ->join('b.reservers', 'r')
+            ->join('r.commentaires', 'c')
+            ->groupBy('b');
     }
 
     // /**

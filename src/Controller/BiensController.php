@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Biens;
-use App\Repository\BiensRepository;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 

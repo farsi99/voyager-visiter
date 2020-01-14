@@ -495,7 +495,7 @@ class User implements UserInterface
 
     public function getPassword()
     {
-        return $this->hash;
+        return $this->motpasse;
     }
 
     public function getSalt()

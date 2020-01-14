@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccountController!
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+				{% if error %}
+					<div class="label label-danger">Login ou mot de passe incorrect</div>
+				{% endif %}
+				<form action="{{ path('account_login') }}" method="POST">
+					<div class="form-group">
+						<label for="">Login</label>
+						<input type="text" name="_username" value="{{lastUser}}" class="form-control">
+						<label for="">Mot de passe</label>
+						<input type="password" name="_password" class="form-control"><br>
+						<button type="submit" class="btn btn-success">Connexion</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
