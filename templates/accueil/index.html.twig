@@ -99,71 +99,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				{% for data in biens %}
-					<div class="col-md-4 col-sm-6 inner">
-						<div class="single-room">
-							<div class="room-thumb">
-								{% for key,image in data.annonce.images %}
-									{% if key ==0 %}
-										<img src="{{image.lien}}" alt="{{image.titre}}"/>
-									{% endif %}
-								{% endfor %}
-								<div class="room-sell">
-									{% set typeBien = 'sell' %}
-									{% if data.annonce.typeBien == 'Particulier' %}
-										{% set typeBien = 'feature' %}
-									{% else %}
-										{% set typeBien = 'sell' %}
-									{% endif %}
-									<ul>
-										<li class="{{typeBien}}">
-											<a href="#">{{data.annonce.typeBien}}</a>
-										</li>
-									</ul>
-								</div>
-								<div class="single-room-overlay">
-									<a href="{{path('detail_biens', {'slug': data.annonce.slug})}}">En savoir plus</a>
-								</div>
-							</div>
-							<div class="room-info">
-								<h2>
-									<a href="{{path('detail_biens', {'slug': data.annonce.slug})}}">{{data.annonce.titre | slice(0,30)}}...
-									</a>
-								</h2>
-								<div class="address">
-									<i class="fa fa-map-marker"></i>
-									{{data.annonce.ville}}
-									/
-									{{data.annonce.commune.libelle}}</div>
-								<p>
-									<span>Chambre:
-										{{data.annonce.nbreChambre}}</span>
-									<span>Voyageurs:
-										{{data.annonce.nbreVisiteur}}
-									</span>
-									<span>Lits:
-										{{data.annonce.nbreLit}}</span>
-								</p>
-								<div class="room-meta">
-									<ul>
-										<li>
-											<i class="fa fa-user"></i>
-											{{data.annonce.proprio.getFullname}}</li>
-										<li>
-											{% include "partials/vote.html.twig" with {'rating': data.voter} %}
-
-										</li>
-
-										<li class="price">{{data.annonce.prix}}
-											€ / nuits</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
+			{% include "partials/_annonce.html.twig" with {'datas': biens} %}
 		</div>
 	</div>
 	<!-- Room Section End -->

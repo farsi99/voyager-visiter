@@ -9,31 +9,34 @@
 						<i class="fa fa-lock"></i>
 						Connexion à votre espace personnel</h3>
 					<hr>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-						<div class="single-input-field">
-							<h4>Email *
-							</h4>
-							<input type="email" name="_useraname" placeholder="votre identifiant" required="true"/>
+					<form action="" method="POST">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<input type="hidden" id="urlLogin" value="{{ path('account_login') }}">
+							<div class="single-input-field">
+								<h4>Email *
+								</h4>
+								<input type="email" name="_useraname" id="username" placeholder="votre identifiant" required="true"/>
+							</div>
 						</div>
-					</div>
-					<div class="col-md-6 col-sm-6 col-xs-12">
-						<div class="single-input-field">
-							<h4>Mot de passse *</h4>
-							<input type="password" name="_password" placeholder="votre mot de passe" required="true"/>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="single-input-field">
+								<h4>Mot de passse *</h4>
+								<input type="password" name="_password" id="password" placeholder="votre mot de passe" required="true"/>
+							</div>
 						</div>
-					</div>
 
-					<div class="col-md-4 col-sm-4 col-xs-12" style="margin-left: 12px;">
-						<div class="single-input-fieldsbtn">
-							<input type="submit" value="Connexion "/>
+						<div class="col-md-4 col-sm-4 col-xs-12" style="margin-left: 12px;">
+							<div class="single-input-fieldsbtn">
+								<input type="submit" value="Connexion" id="formlogin"/>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-4 col-xs-12">
+							<div class="single-input-fieldsbtn">
+								<button class="button">Mot de passe oublié ?</button>
+							</div>
 						</div>
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-12">
-						<div class="single-input-fieldsbtn">
-							<button class="button">Mot de passe oublié ?</button>
-						</div>
-					</div>
-				</div>
+				</form>
 				<button class="close btn-fermer">
 					<i class="fa fa-times" title="Fermer"></i>
 				</button>

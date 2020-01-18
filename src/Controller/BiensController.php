@@ -3,18 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Biens;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\BiensRepository;
+use App\Service\Pagination;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BiensController extends AbstractController
 {
     /**
-     * @Route("/biens", name="biens")
+     * @Route("/biens/{page<\d+>?1}", name="biens")
      */
-    public function index()
+    public function index(BiensRepository $repo, $page, Pagination $pagination)
     {
+        $pagination->setEntityClass(Biens::class)
+            ->setPage($page);
         return $this->render('biens/index.html.twig', [
-            'controller_name' => 'BiensController',
+            'biens' => $pagination,
         ]);
     }
 

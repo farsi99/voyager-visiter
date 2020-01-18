@@ -118,5 +118,25 @@
             $(".popin").toggle('slow');
         });
 
+        //ajax pour la connextion
+        $("#formlogin").click(function () {
+            var url = $("#urlLogin").val(),
+                username = $("#username").val(),
+                password = $("#password").val();
+            $.ajax({
+                type: 'post',
+                data: { '_username': username, '_password': password },
+                url: url,
+                success: function (data) {
+                    if (data == 'success') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+            });
+        });
+
     });
 })(jQuery);

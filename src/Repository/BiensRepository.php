@@ -20,6 +20,18 @@ class BiensRepository extends ServiceEntityRepository
     }
 
     /**
+     * cette méthode traite l'ensemble des biens 
+     */
+    public function TousLesBiens($typeBien = null, $limit, $start)
+    {
+        $req = $this->findAllBiens()
+            ->setFirstResult($start)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+        return $req;
+    }
+    /**
      * cette requete doit retourner les top bien
      */
     public function tophebergement($limit)
