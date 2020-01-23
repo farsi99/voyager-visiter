@@ -23,8 +23,7 @@ class BiensController extends AbstractController
     }
 
     /**
-     * cette méthode traite l'affichage d'un bien en fonction du slug
-     * Une deuxieme
+     * cette méthode traite l'affichage d'un bien
      * @Route("/{slug}", name="detail_biens")
      */
     public function detail(Biens $bien)
