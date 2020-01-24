@@ -183,10 +183,20 @@ class Biens
         $this->favoris = new ArrayCollection();
     }
 
+    /**
+     * cette méthode nous retourne les commentaires
+     */
+    public function Comments()
+    {
+        $commentaires = [];
+        foreach ($this->reservers->toArray() as $reserve) {
+            $commentaires[] = $reserve->getCommentaires()->toArray();
+        }
+        return $commentaires;
+    }
 
     /**
      * Permet d'initialier le slug avant de persister
-     * 
      * @ORM\PrePersist
      * @ORM\PreUpdate
      * 

@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReserverRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Reserver
 {
@@ -58,9 +60,38 @@ class Reserver
      */
     private $vehicule;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $infosuplementaire;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
+    }
+
+    /**
+     * @ORM\prePersist
+     */
+    public function prePersist()
+    {
+        if (empty($this->dateCreation)) {
+            $this->dateCreation = new \DateTime();
+        }
+        if (empty($this->montant)) {
+            //on calcule nombre de jour x le montant
+            $this->montant = $this->biens->getPrix() * $this->getDuration();
+        }
+    }
+
+
+    /**
+     * On crée une méthode qui nous permet de calculer la durée de la reservation
+     */
+    public function getDuration()
+    {
+        $diff = $this->dateFin->diff($this->dateDebut);
+        return $diff->days;
     }
 
     public function getId(): ?int
@@ -179,6 +210,18 @@ class Reserver
     public function setVehicule(?Vehicule $vehicule): self
     {
         $this->vehicule = $vehicule;
+
+        return $this;
+    }
+
+    public function getInfosuplementaire(): ?string
+    {
+        return $this->infosuplementaire;
+    }
+
+    public function setInfosuplementaire(?string $infosuplementaire): self
+    {
+        $this->infosuplementaire = $infosuplementaire;
 
         return $this;
     }

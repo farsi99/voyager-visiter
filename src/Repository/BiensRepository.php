@@ -44,6 +44,7 @@ class BiensRepository extends ServiceEntityRepository
         return $req;
     }
 
+
     /**
      * cette requete retourne toutes les valeurs des biens (annonce)
      */
@@ -54,6 +55,22 @@ class BiensRepository extends ServiceEntityRepository
             ->join('b.reservers', 'r')
             ->join('r.commentaires', 'c')
             ->groupBy('b');
+    }
+
+    /**
+     * cette méthode traite l'affichage d'un bien selon son slug
+     */
+    public function findBienBySlug($slug)
+    {
+        $req = $this->createQueryBuilder('b')
+            ->SELECT('b as bien, AVG(c.vote) as moyenne')
+            ->join('b.reservers', 'r')
+            ->join('r.commentaires', 'c')
+            ->andWhere('b.slug = :val')
+            ->setParameter('val', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $req;
     }
 
     // /**

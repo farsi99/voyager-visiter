@@ -14,7 +14,6 @@ class AccueilController extends AbstractController
      */
     public function index(BiensRepository $req, UserRepository $requ)
     {
-
         return $this->render('accueil/index.html.twig', [
             'biens' => $req->tophebergement(6),
             'hotes' => $requ->bestHote(),

@@ -2,7 +2,7 @@
 
 
 {% block title %}
-	{{bien.titre }}
+	{{data.bien.titre }}
 {% endblock %}
 {% block javascripts %}
 	<script src="https://maps.google.com/maps/api/js?key=AIzaSyDQ4qCuzyHxMKh71i_a1w73OlxTwT6viI8" type="text/javascript"></script>
@@ -82,7 +82,7 @@ initMap();
 				<div class="col-md-8 col-sm-8">
 					<div class="room-details">
 						<div class="property-thumb">
-							{% for image in bien.images %}
+							{% for image in data.bien.images %}
 								<div class="property-single-thumb">
 									<img src="{{ image.lien }}" alt="{{ image.titre}}"/>
 								</div>
@@ -92,10 +92,10 @@ initMap();
 							<ul>
 								<li>
 									<i class="fa fa-user"></i>
-									{{bien.proprio.getFullname}}</li>
+									{{data.bien.proprio.getFullname}}</li>
 								<li>
 									<i class="fa fa-calendar"></i>publié depuis:
-									{{bien.dateCreation|localizeddate('none', 'none', null, null, 'MMMM Y')|capitalize}}</li>
+									{{data.bien.dateCreation|localizeddate('none', 'none', null, null, 'MMMM Y')|capitalize}}</li>
 								<li>
 									<a href="#">
 										<i class="fa fa-heart-o"></i>
@@ -103,44 +103,44 @@ initMap();
 									</a>
 								</li>
 								<li class="price">Prix:
-									{{bien.prix}}
+									{{data.bien.prix}}
 									€/nuit</li>
 							</ul>
 						</div>
 						<div class="room-info">
 							<h2>
-								<a href="#">{{bien.titre}}</a>
+								<a href="#">{{data.bien.titre}}</a>
 							</h2>
 							<div class="address">
 								<i class="fa fa-map-marker"></i>
-								{{ bien.adresse }},
-								{{ bien.codePostal }}
-								{{ bien.ville }}
+								{{ data.bien.adresse }},
+								{{ data.bien.codePostal }}
+								{{ data.bien.ville }}
 								/
-								{{ bien.commune.libelle}}</div>
+								{{ data.bien.commune.libelle}}</div>
 							<p>
 								<span>Chambre:
-									{{ bien.nbreChambre }}</span>
+									{{ data.bien.nbreChambre }}</span>
 								<span>Visiteurs:
-									{{bien.nbreVisiteur}}</span>
+									{{data.bien.nbreVisiteur}}</span>
 								<span>Lit:
-									{{bien.nbreLit | default(0) }}</span>&nbsp;&nbsp; | &nbsp;
-								{% if bien.internet == 1 %}
+									{{data.bien.nbreLit | default(0) }}</span>&nbsp;&nbsp; | &nbsp;
+								{% if data.bien.internet == 1 %}
 									<i class="fa fa-wifi">
 										wifi</i>
 									&nbsp;
 								{% endif %}
 								<i class="fa fa-bolt" aria-hidden="true">
-									{{bien.electricite }}</i>&nbsp;
+									{{data.bien.electricite }}</i>&nbsp;
 								<i class="fa fa-glass" aria-hidden="true">
 
-									{{ bien.eau }}
+									{{ data.bien.eau }}
 								</i>&nbsp;
 								<i class="fa fa-cutlery" aria-hidden="true">
-									{{bien.cuisine}}</i>
+									{{data.bien.cuisine}}</i>
 							</p>
-							{{ bien.description|raw }}
-							<a href="#" class="booking-button">Reservez maintenant</a>
+							{{ data.bien.description|raw }}
+							<a href="{{path('reserver',{'slug':data.bien.slug})}}" class="booking-button">Reservez maintenant</a>
 						</p>
 					</div>
 				</div>
@@ -154,14 +154,14 @@ initMap();
 									<div class="item sngl-testimonial">
 										<div class="sngle-tsmt detail">
 											<div class="col-md-4">
-												<img src="{{ bien.proprio.photo}}" alt=""/>
+												<img src="{{ data.bien.proprio.photo}}" alt=""/>
 											</div>
 											<div class="col-md-8">
 												<div class="client-dsc">
-													<h1>{{ bien.proprio.getFullname }}</h1>
+													<h1>{{ data.bien.proprio.getFullname }}</h1>
 													<h6>Membre depuis:
-														{{bien.proprio.dateInscription | localizeddate('none', 'none', null, null, 'MMMM Y') |capitalize }}</h6>
-													<span class="label label-success">{{ bien.proprio.biens |length }}
+														{{data.bien.proprio.dateInscription | localizeddate('none', 'none', null, null, 'MMMM Y') |capitalize }}</h6>
+													<span class="label label-success">{{ data.bien.proprio.biens |length }}
 														annonces</span>
 												</div>
 											</div>
@@ -183,7 +183,7 @@ initMap();
 						<h2>Ses autres annonces</h2>
 						<div class="border-shape"></div>
 						<div class="all_r_pst">
-							{% set bienusers = bien.proprio.biens %}
+							{% set bienusers = data.bien.proprio.biens %}
 							{% for key, bienuser in bienusers %}
 								{% if key < 4 %}
 									<div class="row">
@@ -229,38 +229,31 @@ initMap();
 						<div class="row align-items-center">
 							<div class="col">Note globale données par nos visiteurs
 							</div>
-							{% set comments = '' %}
+							{% set comments = [] %}
 							{% set sum = 0 %}
 							{% set avg = 0 %}
 							{% set total = 0  %}
-							{% for reservers in bien.reservers %}
-								{% set comments = reservers.commentaires %}
-								{% set total = comments|length %}
+							{% for reserver in data.bien.reservers %}
+								{% set comments = reserver.commentaires %}
 							{% endfor %}
-							{% if total > 0 %}
-								{% for comment in comments %}
-									{% set sum = sum + comment.vote %}
-								{% endfor %}
-							{% endif %}
-							{% set avg = sum / total  %}
+
 							<div class="col">
-								{% include "partials/vote.html.twig" with {'rating': avg} %}
+								{% include "partials/vote.html.twig" with {'rating': data.moyenne} %}
 								<br><small>( Calculée sur
-									{{total }}
+									{{ comments| length }}
 									)</small>
 							</div>
 						</div>
 					</h4>
 				</div>
-				{% if total > 0 %}
+				{% if data.moyenne > 0 %}
 					{% for comment in comments %}
 						<div class="bg-light rounded mb-3 px-3 py-3 ">
 							<strong>{{ comment.user.getFullname }}
 							</strong>a dit:
 							<blockquote>{{comment.contenue}}<br>
 								<strong>Note donnée:</strong>
-								{% include "partials/vote.html.twig" with {'rating': comment.vote } %}
-
+								{% include "partials/vote.html.twig" with {'rating': data.moyenne } %}
 							</blockquote>
 						</div>
 					{% endfor %}

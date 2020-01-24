@@ -1,0 +1,206 @@
+{% extends "base.html.twig" %}
+{% block title %}Reserver un bien
+{% endblock %}
+{% block body %}
+	<!-- Page Heading Section Start -->
+	{% include "partials/headerpage.html.twig" with{'titre' :'Reserver une annonce', 'ariane':'Reservation'} %}
+	<!-- Page Heading Section End -->
+	<!-- Property Details Section Start -->
+		<div class="property-sec pt-50 pb-20"> <div class="container">
+			<div class="row">
+				<div class="col-md-8 col-sm-8">
+					<div class="room-details">
+						<h2>Reservation pour l'annoce:
+							<em>{{bien.titre}}</em>
+						</h2>
+						{{ form_start(form)}}
+
+						<div class="col-md-6">
+							<div class="form-group">
+								{{form_label(form.dateDebut)}}
+								<div class="input-group">
+									{{form_widget(form.dateDebut)}}
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+								</div>
+								<span class="alert alert-danger">
+									{{form_errors(form.dateDebut)}}
+								</span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								{{form_label(form.dateFin)}}
+								<div class="input-group">
+									{{form_widget(form.dateFin)}}
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+								</div>
+								<span class="alert alert-danger">
+									{{form_errors(form.dateFin)}}
+								</span>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="exampleInputAmount">Nombre des visiteurs</label>
+								<div class="input-group">
+									<input type="number" class="form-control" id="exampleInputAmount" placeholder="nombre de voyageurs">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								{{form_label(form.infosuplementaire)}}
+								<div class="input-group">
+									{{form_widget(form.infosuplementaire)}}
+									<div class="input-group-addon">
+										<i class="fa fa-question"></i>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-md-12">
+							<button type="submit" class="btn btn-success btn-reserver">Finalisez votre reservation</button>
+						</div>
+						{{form_end(form)}}
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+					<div class="sidebar">
+						<div class="content">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="alert alert-success info-reserver">
+										<h4 class="alert-heading">
+											<div class="row align-items-center">
+												<ul>
+													<li>
+														<i class="fa fa-coffee"></i>
+														Vous avez reservez pour :
+														<strong>2 jours</strong>
+													</li>
+													<li>
+														<i class="fa fa-bed"></i>
+														le nuit est de :
+														<strong>{{bien.prix}}
+															€ / nuit</strong>
+													</li>
+													<li>
+														<i class="fa fa-calendar-check-o"></i>
+														Montant du séjour 2x{{bien.prix}}
+														:
+														<strong>356 €</strong>
+													</li>
+												</ul>
+												<div class="col-md-12"></div>
+
+											</div>
+										</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+			<!-- Google Map Section Start -->
+			<hr>
+			<div class="row mt-15">
+				<div class="col-md-8">
+					<div class="room-details">
+						<div class="room-meta topreserver">
+							<h2>
+								<a href="#">{{bien.titre}}</a>
+							</h2>
+							<ul>
+								<li>
+									<i class="fa fa-user"></i>
+									{{bien.proprio.fullname}}</li>
+								<li>
+									<i class="fa fa-calendar"></i>publié depuis
+									{{bien.dateCreation|localizeddate('none', 'none', null, null, 'MMMM Y')|capitalize}}</li>
+								<li>
+									<a href="#">
+										<i class="fa fa-star"></i>sur 5 avis</a>
+								</li>
+
+							</ul>
+						</div>
+						<div class="room-info">
+
+							<div class="address">
+								<i class="fa fa-map-marker"></i>
+								{{bien.adresse}}
+								{{bien.codePostal}}
+								{{bien.ville}},
+								{{bien.commune.libelle}}</div>
+							<p>
+								<span>Chambre:
+									{{bien.nbreChambre}}</span>
+								<span>Visiteurs:
+									{{bien.nbreVisiteur}}</span>
+								<span>Lit:
+									{{bien.nbreLit}}</span>&nbsp;&nbsp; | &nbsp;
+								<i class="fa fa-wifi">
+									wifi</i>
+								&nbsp;
+
+								<i class="fa fa-television" aria-hidden="true">
+									Télévision</i>&nbsp;
+
+								<i class="fa fa-cutlery" aria-hidden="true">
+									{{bien.cuisine}}</i>
+							</p>
+							{{bien.description | raw}}
+						</div>
+
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="item sngl-testimonial">
+								<div class="sngle-tsmt detail">
+									<div class="col-md-12">
+										<h2>Votre hôte</h2>
+									</div>
+									<div class="col-md-4">
+
+										<img src="{{bien.proprio.photo}}" alt=""/>
+									</div>
+									<div class="col-md-8">
+										<div class="client-dsc">
+											<h1>{{ bien.proprio.fullName }}</h1>
+											<h6>membre depuis
+												{{bien.proprio.dateInscription |localizeddate('none', 'none', null, null, 'MMMM Y')|capitalize}}</h6>
+											<span class="label label-success">Annonces
+												{{bien.proprio.reservers | length }}</span>
+
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+							<div class="single-hote-overly">
+								<a href="">en savoir plus</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Google Map Section End -->
+		</div>
+	</div>
+	<!-- Property Details Section End -->
+{% endblock %}

@@ -26,10 +26,10 @@ class BiensController extends AbstractController
      * cette méthode traite l'affichage d'un bien en fonction du slug
      * @Route("/{slug}", name="detail_biens")
      */
-    public function detail(Biens $bien)
+    public function detail(BiensRepository $req, $slug)
     {
         return $this->render('biens/detail.html.twig', [
-            'bien' => $bien
+            'data' => $req->findBienBySlug($slug)
         ]);
     }
 }

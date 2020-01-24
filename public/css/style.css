@@ -297,3 +297,33 @@
     margin-right: 16px;    
     padding: 5px;
  }
+ .info-reserver{
+    margin-top: 65px;
+}
+.info-reserver ul > li {
+   padding: 20px 0 20px 0;
+   border-bottom: 1px dotted #a0a0a0;
+   margin-right: 19px
+}
+.info-reserver ul > li >strong{
+    color:#d7a40e;
+    font-weight: bold;     
+}
+.info-reserver ul > li:last-child{
+    border-bottom: none;
+}
+.form-control{
+height: 40px;
+border-radius: 0px;
+border: 1px solid #e7e7e7;
+-webkit-box-shadow: none !important;
+     box-shadow: none !important; 
+}
+.topreserver{
+    border-top: none !important;
+}
+.btn-reserver{
+    padding: 12px;
+    font-weight: bold;
+    font-size: 16px;
+}
