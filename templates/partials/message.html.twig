@@ -1,0 +1,9 @@
+{% for key, messages in app.flashes %}
+	<div class="container">
+		<div class="alert alert-{{ key }}">
+			{% for message in messages %}
+				{{ message | raw }}
+			{% endfor %}
+		</div>
+	</div>
+{% endfor %}

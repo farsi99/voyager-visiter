@@ -312,6 +312,18 @@
 .info-reserver ul > li:last-child{
     border-bottom: none;
 }
+.inbox-widget .inbox-item .inbox-item-date{
+    font-weight: bold;
+    font-size: 15px !important;
+    top: 15px !important ;
+    right: 15px !important;
+ }
+ .panel-book{
+     font-size: 25px;
+ }
+ .height-book{
+     height: 77px !important;
+ }
 .form-control{
 height: 40px;
 border-radius: 0px;
@@ -326,4 +338,18 @@ border: 1px solid #e7e7e7;
     padding: 12px;
     font-weight: bold;
     font-size: 16px;
+}
+.new{
+    font-weight: bold;
+    color: seagreen !important;
+}
+.disabled {
+color: red !important;
+font-weight: bold;
+}
+
+.frm { background-color: seashell; padding: 1px;}
+.frm > ul > li{
+font-size: 11px;
+columns:#a94442;
 }

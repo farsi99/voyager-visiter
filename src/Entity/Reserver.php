@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ReserverRepository")
@@ -22,11 +23,15 @@ class Reserver
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\Date(message= "la date d'arrivée doit être au bon format")
+     * @Assert\GreaterThan("today",message="la date d'arrivée doit être supérrier à celle d'aujourd'hui")
      */
     private $dateDebut;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\Date(message= "la date de départ doit être au bon format")
+     * @Assert\GreaterThan(propertyPath="dateDebut", message="La date fin doit être supérieur à la date de début")
      */
     private $dateFin;
 
@@ -84,6 +89,49 @@ class Reserver
         }
     }
 
+    /**
+     * Permet de savoir si les dates sont possible
+     */
+    public function isBookableDates()
+    {
+        // 1 - il faut connaitre les dates impossible pour l'annonce
+        $notAvailabledays = $this->biens->getNotAvialableDays();
+
+        //2 - Compparer les dates impossible avec la date possible
+        $bookingDays = $this->getDays();
+
+        $formtDays = function ($day) {
+            return $day->format('Y-m-d');
+        };
+
+        $days = array_map($formtDays, $bookingDays);
+
+        $notAvalable = array_map($formtDays, $notAvailabledays);
+
+        foreach ($days as $day) {
+            if (array_search($day, $notAvalable) !== false) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Permet de recuperer un tableau des journées reservers
+     * @return array un tableau des jours choisi par le client
+     */
+    public function getDays()
+    {
+        $resultat = range(
+            $this->dateDebut->getTimestamp(),
+            $this->dateFin->getTimestamp(),
+            24 * 60 * 60
+        );
+
+        $days = array_map(function ($daysTimestamp) {
+            return new \DateTime(date('Y-m-d', $daysTimestamp));
+        }, $resultat);
+
+        return $days;
+    }
 
     /**
      * On crée une méthode qui nous permet de calculer la durée de la reservation

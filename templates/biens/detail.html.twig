@@ -240,14 +240,14 @@ initMap();
 							<div class="col">
 								{% include "partials/vote.html.twig" with {'rating': data.moyenne} %}
 								<br><small>( Calculée sur
-									{{ comments| length }}
+									{{ data.bien.getCommentaires| length }}
 									)</small>
 							</div>
 						</div>
 					</h4>
 				</div>
 				{% if data.moyenne > 0 %}
-					{% for comment in comments %}
+					{% for comment in data.bien.getCommentaires %}
 						<div class="bg-light rounded mb-3 px-3 py-3 ">
 							<strong>{{ comment.user.getFullname }}
 							</strong>a dit:

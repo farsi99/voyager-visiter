@@ -1,0 +1,271 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Votre reservation n°
+	{{reserver.id}}
+{% endblock %}
+
+{% block body %}
+	<!-- Page Heading Section Start -->
+	{% include "partials/headerpage.html.twig" with{'titre' :'Confirmation de votre reservation', 'ariane':'Voir reservation'} %}
+	<!-- Page Heading Section End -->
+	<!-- Property Details Section Start -->
+		<div class="property-sec pt-50 pb-20"> <div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 ">
+					<div class="sidebar">
+						<div
+							class="content">
+							<!-- inclusion du sidebar profil -->
+							{% include "partials/sidebar_profil.html.twig" with {'user': app.user} %}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9 col-sm-9" style="background-color: #f1f4f9;">
+					<div
+						id="main-wrapper">
+
+						<!-- Row -->
+						<div class="row">
+							{% include "partials/message.html.twig" %}
+							<div class="col-lg-6 col-md-6">
+								<div class="panel panel-white">
+									<div class="panel-heading">
+										<h2 class="panel-title panel-book">Détail de votre reservation</h2>
+									</div>
+									<div class="panel-body">
+										<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">
+											<div class="inbox-widget slimscroll" style="overflow: hidden; width: auto; height: 100%;">
+												<a href="#">
+													<div class="inbox-item">
+														<p class="inbox-item-author">Reservation N°</p>
+														<p class="inbox-item-date rightbook">{{ reserver.id }}</p>
+													</div>
+												</a>
+												<a href="#">
+													<div class="inbox-item">
+														<p class="inbox-item-author">Date arrivée
+														</p>
+														<p class="inbox-item-date rightbook">{{reserver.dateDebut | date('d-m-Y')}}</p>
+													</div>
+												</a>
+												<a href="#">
+													<div class="inbox-item">
+														<p class="inbox-item-author">Date départ
+														</p>
+														<p class="inbox-item-date rightbook">{{reserver.dateFin| date('d-m-Y')}}</p>
+													</div>
+												</a>
+
+												<a href="#">
+													<div class="inbox-item">
+														<p class="inbox-item-author">Nombre de nuit</p>
+														<p class="inbox-item-date rightbook">{{ reserver.getDays | length - 1 }}</p>
+													</div>
+												</a>
+												<a href="#">
+													<div class="inbox-item">
+														<p class="inbox-item-author">Montant total</p>
+														<p class="inbox-item-date rightbook">{{ reserver.montant}}
+															€</p>
+													</div>
+												</a>
+												<a href="#">
+													<div class="inbox-item">
+														<p class="inbox-item-author">Commentaire</p>
+														<p class="inbox-item-text">{{reserver.infosuplementaire | raw }}</p>
+
+													</div>
+												</a>
+											</div>
+											<div class="slimScrollBar" style="background: rgb(204, 204, 204) none repeat scroll 0% 0%; width: 7px; position: absolute; top: 0px; opacity: 0.3; display: block; border-radius: 0px; z-index: 99; right: 0px; height: 300.468px;"></div>
+											<div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51) none repeat scroll 0% 0%; opacity: 0.2; z-index: 90; right: 0px;"></div>
+										</div>
+									</div>
+									<div class="panel-heading">
+										<h2 class="panel-title panel-book">Votre hôte</h2>
+									</div>
+									<div class="panel-body">
+										<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">
+											<div class="inbox-widget height-book">
+												<a href="#">
+													<div class="inbox-item">
+														<div class="inbox-item-img"><img src="{{reserver.biens.proprio.photo }}" class="img-circle" alt=""></div>
+														<p class="inbox-item-author">{{reserver.biens.proprio.fullName }}</p>
+														<p class="inbox-item-text">Membre depuis
+														</p>
+														<p class="inbox-item-date">{{reserver.biens.proprio.dateInscription| localizeddate('none', 'none', null, null, 'MMMM Y') |capitalize }}</p>
+													</div>
+												</a>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6">
+								<div class="panel panel-white">
+									<div class="panel-heading">
+										<h2 class="panel-title panel-book">Votre hebergement</h2>
+									</div>
+									<div class="panel-body">
+										<div class="room-details">
+											<div class="property-thumb">
+												{% for image in reserver.biens.images %}
+													<div class="property-single-thumb">
+														<img src="/{{ image.lien }}" alt=""/>
+													</div>
+												{% endfor %}
+
+											</div>
+											<div class="room-meta">
+												<ul>
+													<li>
+														<i class="fa fa-user"></i>
+														{{reserver.biens.proprio.fullName}}</li>
+													{% set sum = 0 %}
+													{% set avg = 0 %}
+													{% if reserver.biens.commentaires | length > 0 %}
+														{% for commentaire in reserver.biens.commentaires %}
+															{% set sum = sum + commentaire.vote %}
+														{% endfor %}
+														{% set avg = sum / reserver.biens.commentaires | length %}
+													{% endif %}
+
+													<a href="#">
+														{% include "partials/vote.html.twig" with {'rating': avg} %}
+													</li>
+
+												</ul>
+											</div>
+											<div class="room-info">
+												<h2>
+													<a href="#">{{reserver.biens.titre}}</a>
+												</h2>
+												<div class="address">
+													<i class="fa fa-map-marker"></i>
+													{{reserver.biens.ville}},
+													{{ reserver.biens.commune.libelle}}</div>
+												<p>
+													<span>Chambre:
+														{{reserver.biens.nbreChambre}}</span>
+													<span>Visiteurs: 4</span>
+													<span>Lit:
+														{{reserver.biens.nbreLit}}</span>&nbsp;&nbsp; | &nbsp;
+													<i class="fa fa-wifi">
+														wifi</i>
+													&nbsp;
+													<i class="fa fa-television" aria-hidden="true">
+														Télévision</i>&nbsp;
+													<i class="fa fa-cutlery" aria-hidden="true">
+														{{reserver.biens.cuisine}}</i>
+												</p>
+												{{reserver.biens.description | raw }}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-lg-12 col-md-12">
+								<div class="panel panel-white">
+									<div class="panel-heading">
+										<h4 class="panel-title">Mes dernières échanges</h4>
+									</div>
+									<div class="panel-body">
+										<div class="table-responsive project-stats">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>#</th>
+														<th>Expediteur</th>
+														<th>Sujet</th>
+														<th>Status</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<th scope="row">
+															<i class="fa fa-envelope-o"></i>
+														</th>
+														<td>David Green</td>
+														<td>Mailbox Template</td>
+														<td>
+															<span class="label label-info">Pending</span>
+														</td>
+
+
+													</tr>
+													<tr>
+														<th scope="row">
+															<i class="fa fa-envelope"></i>
+														</th>
+														<td>Sandra Smith</td>
+														<td>Wordpress Theme</td>
+														<td>
+															<span class="label label-primary">In Progress</span>
+														</td>
+													</tr>
+													<tr>
+														<th scope="row">
+															<i class="fa fa-envelope-o"></i>
+														</th>
+														<td>Chritopher Palmer</td>
+														<td>Modern Admin Template</td>
+														<td>
+															<span class="label label-success">Finished</span>
+														</td>
+
+
+													</tr>
+													<tr>
+														<th scope="row">
+															<i class="fa fa-envelope-o"></i>
+														</th>
+														<td>Amily Lee</td>
+														<td>eCommerce template</td>
+														<td>
+															<span class="label label-danger">Canceled</span>
+														</td>
+
+
+													</tr>
+													<tr>
+														<th scope="row">
+															<i class="fa fa-envelope"></i>
+														</th>
+														<td>Nick Doe</td>
+														<td>Website PSD</td>
+														<td>
+															<span class="label label-info">Testing</span>
+														</td>
+
+
+													</tr>
+													<tr>
+														<th scope="row">
+															<i class="fa fa-envelope"></i>
+														</th>
+														<td>David Green</td>
+														<td>Fronted Theme</td>
+														<td>
+															<span class="label label-warning">Waiting</span>
+														</td>
+
+
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+	<!-- Property Details Section End -->
+{% endblock %}

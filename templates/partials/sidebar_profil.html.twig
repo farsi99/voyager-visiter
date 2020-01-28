@@ -1,0 +1,38 @@
+<div class="row">
+	<div class="col-md-12">
+		<div class="row sd-profil">
+			<div class="col-lg-12 col-md-12 encadrer">
+				<div class="item sngl-testimonial">
+					<div class="sngle-tsmt">
+						<img src="{{user.photo}}" alt="{{user.slug}}"/>
+						<div class="client-dsc">
+							<h2>{{ user.getFullName }}</h2>
+							<h6>Membre depuis
+								{{ user.dateInscription |localizeddate('none', 'none', null, null, 'MMMM Y')|capitalize}}</h6>
+						</div>
+					</div>
+				</div>
+				<ul>
+					<li class="active">
+						<a href="">Tableau de bord</a>
+					</li>
+					<li>
+						<a href="">Mon Compte</a>
+					</li>
+					<li>
+						<a href="">Mes échanges</a>
+					</li>
+					<li>
+						<a href="">Mes reservations</a>
+					</li>
+					<li>
+						<a href="">Mes annonces</a>
+					</li>
+					<li>
+						<a href="">Déconnexion</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

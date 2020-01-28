@@ -1,6 +1,11 @@
 {% extends "base.html.twig" %}
 {% block title %}Reserver un bien
 {% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous"/>
+{% endblock %}
+
 {% block body %}
 	<!-- Page Heading Section Start -->
 	{% include "partials/headerpage.html.twig" with{'titre' :'Reserver une annonce', 'ariane':'Reservation'} %}
@@ -8,7 +13,9 @@
 	<!-- Property Details Section Start -->
 		<div class="property-sec pt-50 pb-20"> <div class="container">
 			<div class="row">
+				{% include "partials/message.html.twig" %}
 				<div class="col-md-8 col-sm-8">
+
 					<div class="room-details">
 						<h2>Reservation pour l'annoce:
 							<em>{{bien.titre}}</em>
@@ -24,9 +31,11 @@
 										<i class="fa fa-calendar"></i>
 									</div>
 								</div>
-								<span class="alert alert-danger">
-									{{form_errors(form.dateDebut)}}
-								</span>
+								{% if form_errors(form.dateDebut) %}
+									<span class="alert alert-danger frm">
+										{{form_errors(form.dateDebut)}}
+									</span>
+								{% endif %}
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -38,9 +47,12 @@
 										<i class="fa fa-calendar"></i>
 									</div>
 								</div>
-								<span class="alert alert-danger">
-									{{form_errors(form.dateFin)}}
-								</span>
+								{% if form_errors(form.dateFin) %}
+									<div class="alert alert-danger frm">
+										{{form_errors(form.dateFin)}}
+									</div>
+
+								{% endif %}
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -85,19 +97,19 @@
 													<li>
 														<i class="fa fa-coffee"></i>
 														Vous avez reservez pour :
-														<strong>2 jours</strong>
+														<strong id="days">... jours</strong>
 													</li>
 													<li>
 														<i class="fa fa-bed"></i>
 														le nuit est de :
-														<strong>{{bien.prix}}
+														<strong id="price">{{bien.prix}}
 															€ / nuit</strong>
 													</li>
 													<li>
 														<i class="fa fa-calendar-check-o"></i>
-														Montant du séjour 2x{{bien.prix}}
-														:
-														<strong>356 €</strong>
+														Montant du séjour 
+																																										:
+														<strong id="totalprice">... €</strong>
 													</li>
 												</ul>
 												<div class="col-md-12"></div>
@@ -203,4 +215,31 @@
 		</div>
 	</div>
 	<!-- Property Details Section End -->
+{% endblock %}
+{% block javascripts %}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
+	<script>
+		$(document).ready(function () {
+$("#reserver_dateDebut,#reserver_dateFin").datepicker({
+format: 'dd/mm/yyyy',
+datesDisabled: [{% for day in bien.notAvialableDays %}"{{ day.format('d/m/Y') }}",{% endfor %}],
+startDate: new Date()
+});
+$("#reserver_dateDebut, #reserver_dateFin").on("change", calculateAmount);
+});
+
+function calculateAmount() { // on chope les dates
+const endDate = new Date($('#reserver_dateFin').val().replace(/(\d+)\/(\d+)\/(\d{4})/, '$3-$2-$1'));
+const startDate = new Date($('#reserver_dateDebut').val().replace(/(\d+)\/(\d+)\/(\d{4})/, '$3-$2-$1'));
+const DAY_TIME = 24 * 60 * 60 * 1000;
+console.log('Debut: ' + startDate + 'Fin: ' + endDate);
+if (startDate && endDate && startDate < endDate) {
+const interval = endDate.getTime() - startDate.getTime();
+const days = interval / DAY_TIME;
+const amount = days * {{ bien.prix }};
+$("#days").text(days + ' jours');
+$("#totalprice").text(amount.toLocaleString('fr-FR') + ' €');
+}
+}
+	</script>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -183,17 +184,6 @@ class Biens
         $this->favoris = new ArrayCollection();
     }
 
-    /**
-     * cette méthode nous retourne les commentaires
-     */
-    public function Comments()
-    {
-        $commentaires = [];
-        foreach ($this->reservers->toArray() as $reserve) {
-            $commentaires[] = $reserve->getCommentaires()->toArray();
-        }
-        return $commentaires;
-    }
 
     /**
      * Permet d'initialier le slug avant de persister
@@ -208,6 +198,42 @@ class Biens
             $slugify = new Slugify();
             $this->slug = $slugify->slugify($this->titre);
         }
+    }
+
+    /**
+     * Permet de recuperer les jours qui ne sont pas disponible sur cet appartement
+     * @return array Tableau des dateTime 
+     */
+    public function getNotAvialableDays()
+    {
+        $notAvalableDays = [];
+        foreach ($this->reservers as $reserver) {
+            $resultat = range(
+                $reserver->getDateDebut()->getTimestamp(),
+                $reserver->getDateFin()->getTimestamp(),
+                24 * 60 * 60
+            );
+
+            $days = array_map(function ($daysTimestamp) {
+                return new \DateTime(date('Y-m-d', $daysTimestamp));
+            }, $resultat);
+            $notAvalableDays = array_merge($notAvalableDays, $days);
+        }
+        return $notAvalableDays;
+    }
+
+    /**
+     * cette méthode nous retourne les commentaires
+     */
+    public function getCommentaires()
+    {
+        $commentaires = [];
+        foreach ($this->reservers->toArray() as $reserve) {
+            foreach ($reserve->getCommentaires() as $commentaire) {
+                $commentaires[] = $commentaire;
+            }
+        }
+        return $commentaires;
     }
 
     public function getId(): ?int
