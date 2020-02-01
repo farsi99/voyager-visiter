@@ -15,6 +15,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ReserverController extends AbstractController
 {
+
+    /**
+     * Permet de voir l'ensemble des reservation d'un abonnée
+     * @Route("/reservation/mes-reservations", name="all_reserver")
+     * @isGranted("ROLE_USER")
+     */
+    public function show_all_reserver(ReserverRepository $repo)
+    {
+        $allbook = $repo->findByUser($this->getUser());
+        dump($allbook);
+        return $this->render("reserver/all.html.twig", [
+            'reservations' => $allbook
+        ]);
+    }
+
     /**
      * @Route("/reservation/{slug}", name="reserver")
      * @isGranted("ROLE_USER")
@@ -61,20 +76,5 @@ class ReserverController extends AbstractController
         } else {
             return $this->redirectToRoute('reserver');
         }
-    }
-
-    /**
-     * Permet de voir l'ensemble des reservation d'un abonnée
-     * @Route("/reservation/mes-reservations", name="all_reserver")
-     * @isGranted("ROLE_USER")
-     */
-    public function show_all_reserver(ReserverRepository $repo)
-    {
-        $allbook = $repo->findByUser($this->getUser());
-        dump($allbook);
-        die;
-        return $this->render("reserver/all.html.twig", [
-            'allbook' => $allbook
-        ]);
     }
 }
