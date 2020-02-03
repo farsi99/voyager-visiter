@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\RegistrationType;
 use App\Repository\ReserverRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AccountController extends AbstractController
 {
@@ -43,5 +48,32 @@ class AccountController extends AbstractController
      */
     public function logout()
     {
+    }
+
+    /**
+     * Cette methode permet d'enregister un utilisateur
+     * @Route("/register", name = "acount_register")
+     * @return Response
+     */
+    public function register(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    {
+        $user = New User();
+        $form = $this->createForm(RegistrationType::class, $user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $user->setDateInscription(new \DateTime());
+            $hash = $encoder->encodePassword($user, $user->getMotpasse());
+            $user->setMotpasse($hash);
+            $manager->persist($user);
+            $manager->flush();
+
+            $this->addFlash('success', 'Votre compte est crée avec succès, vous pouvez maintenat vous connectez!');
+            $this->redirectToRoute('account_login');
+        } 
+
+        return $this->render('account/register.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

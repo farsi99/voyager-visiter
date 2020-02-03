@@ -1,0 +1,81 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Inscription sur le site
+{% endblock %}
+
+{% block body %}
+    <!-- Page Heading Section Start -->
+		<div class="pagehding-sec">
+			<div class="images-overlay"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="page-heading">
+							<h1>Fiche d'inscription</h1>
+							<ul>
+								<li><a href="index.html">Accueil</a></li>
+								<li><a href="#">Inscription</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Page Heading Section End -->
+        <!-- Contact Section Start -->
+		<section class="contact-form-sec pt-50 pb-50">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="contact-field">
+						   {{form_start(form)}}
+							<h2>Inscription membre</h2>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+							   {{form_label(form.civilite)}}
+							   {{form_widget(form.civilite)}}
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="single-input-field">
+									<h4>{{form_label(form.nom)}} *</h4>
+									{{form_widget(form.nom)}}
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="single-input-field1">
+									<h4>{{form_label(form.prenom)}} *</h4>
+									{{form_widget(form.prenom)}}
+								</div>
+							</div>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="single-input-field">
+									<h4>{{form_label(form.email)}} *</h4>
+									{{form_widget(form.email)}}
+								</div>
+							</div>							
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="single-input-field">
+									<h4>{{form_label(form.motpasse)}} *</h4>
+									{{form_widget(form.motpasse)}}
+								</div>
+							</div>	
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<div class="single-input-field">
+									<h4>{{form_label(form.confirm_password)}} *</h4>
+									{{form_widget(form.confirm_password)}}
+								</div>
+							</div>
+							<div class="col-md-4 col-sm-4 col-xs-12">
+								<div class="single-input-fieldsbtn">
+									<input type="submit" value="Enregistrer "/>
+								</div>
+							</div>
+							{{form_end(form)}}
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</section>
+		<!-- Contact Section End -->
+    
+{% endblock %}
